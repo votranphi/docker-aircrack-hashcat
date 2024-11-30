@@ -5,16 +5,16 @@ This repository includes basic commands and bash scripts to run Docker container
 - One Docker Image running Kali Linux has aircrack-ng and hashcat installed.
 - One shared Docker Volume has "crack_me" folder in it. Folder's structure:
     ```
-        crack_me/
-        |-  ap_bssid.txt
-        |-  ap_ch.txt
-        |-  CrackMe-01-Hash.txt
-        |-  CrackMe-01.cap
-        |-  CrackMe-01.csv
-        |-  CrackMe-01.kismet.csv
-        |-  CrackMe-01.kismet.netxml
-        |-  CrackMe-01.log.csv
-        |-  rockyou.txt
+    crack_me/
+    |-  ap_bssid.txt
+    |-  ap_ch.txt
+    |-  CrackMe-01-Hash.txt
+    |-  CrackMe-01.cap
+    |-  CrackMe-01.csv
+    |-  CrackMe-01.kismet.csv
+    |-  CrackMe-01.kismet.netxml
+    |-  CrackMe-01.log.csv
+    |-  rockyou.txt
     ```
 **For easy preparation, please follow the instruction in "commands.txt" file**
 
@@ -28,7 +28,11 @@ chmod +x ./hashcat
 ```
 
 # How to use
+To run the password cracking using aircrack-ng:
 ```bash
-    ./aircrack.sh <number_of_containers_run_parallel>
-    ./hashcat.sh <number_of_containers_run_parallel>
+./aircrack.sh <number_of_containers_run_parallel>
+```
+To run the password cracking using hashcat:
+```bash
+./hashcat.sh <number_of_containers_run_parallel>
 ```
