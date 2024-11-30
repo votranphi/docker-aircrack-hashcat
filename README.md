@@ -6,15 +6,15 @@ This repository includes basic commands and bash scripts to run Docker container
 - One shared Docker Volume has "crack_me" folder in it. Folder's structure:
     ```
     crack_me/
-    |-  ap_bssid.txt
-    |-  ap_ch.txt
-    |-  CrackMe-01-Hash.txt
-    |-  CrackMe-01.cap
-    |-  CrackMe-01.csv
-    |-  CrackMe-01.kismet.csv
-    |-  CrackMe-01.kismet.netxml
-    |-  CrackMe-01.log.csv
-    |-  rockyou.txt
+    |-- ap_bssid.txt
+    |-- ap_ch.txt
+    |-- CrackMe-01-Hash.txt
+    |-- CrackMe-01.cap
+    |-- CrackMe-01.csv
+    |-- CrackMe-01.kismet.csv
+    |-- CrackMe-01.kismet.netxml
+    |-- CrackMe-01.log.csv
+    |-- rockyou.txt
     ```
 **For easy preparation, please follow the instruction in "commands.txt" file**
 
