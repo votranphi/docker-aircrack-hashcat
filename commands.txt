@@ -64,6 +64,7 @@ hashcat -m 22000 CrackMe-01-Hash.txt rockyou.txt
 
 
 # PART 3: FIND PASSWORD USING DISTRIBUTED COMPUTING KNOWLEDGEMENT (DOCKER)
+# PART 3.1: USING AIRCRACK
 # Create a folder for easy management
 mkdir crack_me
 mv * crack_me
@@ -133,14 +134,24 @@ chmod +x hashcat.sh
 # Watch the containers' state
 docker ps -a
 
+# Stop all the containers to release the resources
+docker stop $(docker ps -aq)
+
 # Print out the completed's container's log
 docker logs <completed_container_name>
+
+# PART 3.2: USING HASHCAT
+# Remove all the previous "workers"
+docker rm $(docker ps -aq)
 
 # Run the prepared scripts (using hashcat)
 ./hashcat.sh <number_of_containers>
 
 # Watch the containers' state
 docker ps -a
+
+# Stop all the containers to release the resources
+docker stop $(docker ps -aq)
 
 # Print out the completed's container's log
 docker logs <completed_container_name>
