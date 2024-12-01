@@ -27,7 +27,7 @@ chmod +x ./aircrack.sh
 chmod +x ./hashcat
 ```
 
-# How to use
+# Usage
 To run the password cracking using aircrack-ng:
 ```bash
 ./aircrack.sh <number_of_containers_run_parallel>
