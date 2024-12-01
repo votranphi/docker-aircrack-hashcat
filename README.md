@@ -24,7 +24,7 @@ Follow these steps:
 git clone https://github.com/votranphi/docker-aircrack-hashcat.git
 cd docker-aircrack-hashcat
 chmod +x ./aircrack.sh
-chmod +x ./hashcat
+chmod +x ./hashcat.sh
 ```
 
 # Usage
