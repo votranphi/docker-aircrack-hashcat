@@ -3,6 +3,7 @@
 # Calculate number of line that's used to split the rockyou.txt
 NO_LINE=$((14344393/$1+1))
 
+# Run a busybox connects to shared volume to split the rockyou.txt file inside it, base on number of lines
 docker run --rm -it --name tmp_ctn --user nhom13 --workdir /home/nhom13/crack_me --volume crack_me:/home/nhom13/crack_me worker:latest split -l $NO_LINE --numeric-suffixes=1 --additional-suffix=.txt rockyou.txt chunk_;
 
 # Create and run containers to crack the password
