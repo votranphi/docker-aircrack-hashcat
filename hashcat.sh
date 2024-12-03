@@ -9,7 +9,7 @@ docker run --rm -it --name tmp_ctn --user nhom13 --workdir /home/nhom13/crack_me
 # Create and run containers to crack the password
 for ((i = 1; i <= $1; i++)); do
 	if [[ $i -ge 1 && $i -le 9 ]]; then
-		docker run -d --name "worker-$i" -u nhom13 -w /home/nhom13/crack_me -v crack_me:/home/nhom13/crack_me worker:latest hashcat -m 22000 CrackMe-01-Hash.txt "chunk_0$i.txt";
+		docker run -d --name "worker-0$i" -u nhom13 -w /home/nhom13/crack_me -v crack_me:/home/nhom13/crack_me worker:latest hashcat -m 22000 CrackMe-01-Hash.txt "chunk_0$i.txt";
 	else
 		docker run -d --name "worker-$i" -u nhom13 -w /home/nhom13/crack_me -v crack_me:/home/nhom13/crack_me worker:latest hashcat -m 22000 CrackMe-01-Hash.txt "chunk_$i.txt";
 	fi
